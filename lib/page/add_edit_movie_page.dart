@@ -32,23 +32,27 @@ class _AddEditMoviePageState extends State<AddEditMoviePage> {
       appBar: AppBar(
         title: Text(widget.movie == null ? 'Add Movie' : 'Edit Movie'),
       ),
-      body: Container(
-        padding: const EdgeInsets.all(16),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextField(
               controller: _titleController,
-              decoration: const InputDecoration(labelText: 'Title'),
+              decoration: InputDecoration(labelText: 'Title'),
             ),
+            const SizedBox(height: 12),
             TextField(
               controller: _descriptionController,
-              decoration: const InputDecoration(labelText: 'Description'),
+              decoration: InputDecoration(labelText: 'Description'),
+              maxLines: 3,
             ),
+            const SizedBox(height: 12),
             TextField(
               controller: _coverImageController,
-              decoration: const InputDecoration(labelText: 'Cover Image URL'),
+              decoration: InputDecoration(labelText: 'Cover Image URL'),
             ),
+            const SizedBox(height: 12),
             ElevatedButton(
               onPressed: () async {
                 String title = _titleController.text;
@@ -57,9 +61,10 @@ class _AddEditMoviePageState extends State<AddEditMoviePage> {
 
                 if (title.isNotEmpty && description.isNotEmpty && coverImage.isNotEmpty) {
                   if (widget.movie == null) {
+                    // Tambahkan film baru
                     await MoviesDatabase.instance.create(Movie(
                       title: title,
-                      addedDate: DateTime.now(),
+                      addedDate: DateTime.now(), // Menambahkan tanggal saat ini
                       description: description,
                       coverImage: coverImage,
                     ));
@@ -72,7 +77,8 @@ class _AddEditMoviePageState extends State<AddEditMoviePage> {
                     ));
                   }
 
-                  Navigator.of(context).pop(); // Kembali ke halaman sebelumnya setelah menyimpan
+                  // Kembali ke halaman sebelumnya setelah menambahkan atau memperbarui film
+                  Navigator.of(context).pop();
                 } else {
                   // Tampilkan pesan kesalahan jika ada data yang kosong
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -80,8 +86,9 @@ class _AddEditMoviePageState extends State<AddEditMoviePage> {
                   );
                 }
               },
-              child: const Text('Save'),
+              child: Text('Save'),
             ),
+
           ],
         ),
       ),

@@ -53,8 +53,21 @@ class _MoviesPageState extends State<MoviesPage> {
                         final movie = movies[index];
                         return ListTile(
                           title: Text(movie.title),
-                          subtitle: Text(movie.description),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(movie.description),
+                              Text('Added: ${movie.addedDate.toString()}'),
+                            ],
+                          ),
                           leading: Image.network(movie.coverImage),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed: () async {
+                              await MoviesDatabase.instance.delete(movie.id!);
+                              refreshMovies();
+                            },
+                          ),
                           onTap: () async {
                             await Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => AddEditMoviePage(movie: movie),
@@ -67,66 +80,3 @@ class _MoviesPageState extends State<MoviesPage> {
         ),
       );
 }
-
-
-// class AddEditMoviePage extends StatelessWidget {
-//   const AddEditMoviePage({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     // Declare TextEditingController untuk menyimpan nilai input pengguna
-//     final TextEditingController _titleController = TextEditingController();
-//     final TextEditingController _descriptionController = TextEditingController();
-//     final TextEditingController _coverImageController = TextEditingController();
-
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Add Movie'),
-//       ),
-//       body: Container(
-//         padding: const EdgeInsets.all(16),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.stretch,
-//           children: [
-//             TextField(
-//               controller: _titleController,
-//               decoration: const InputDecoration(labelText: 'Title'),
-//             ),
-//             TextField(
-//               controller: _descriptionController,
-//               decoration: const InputDecoration(labelText: 'Description'),
-//             ),
-//             TextField(
-//               controller: _coverImageController,
-//               decoration: const InputDecoration(labelText: 'Cover Image URL'),
-//             ),
-//             ElevatedButton(
-//               onPressed: () async {
-//                 String title = _titleController.text;
-//                 String description = _descriptionController.text;
-//                 String coverImage = _coverImageController.text;
-
-//                 if (title.isNotEmpty && description.isNotEmpty && coverImage.isNotEmpty) {
-//                   await MoviesDatabase.instance.create(Movie(
-//                     title: title,
-//                     addedDate: DateTime.now(),
-//                     description: description,
-//                     coverImage: coverImage,
-//                   ));
-//                   // Refresh halaman MoviesPage setelah menambahkan film baru
-//                   Navigator.pop(context);
-//                 } else {
-//                   // Tampilkan pesan kesalahan jika ada data yang kosong
-//                   ScaffoldMessenger.of(context).showSnackBar(
-//                     SnackBar(content: Text('Please fill in all fields')),
-//                   );
-//                 }
-//               },
-//               child: const Text('Save'),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
