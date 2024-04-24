@@ -1,8 +1,4 @@
-# ETS PPB
-
-Nama : Muhammad Daffa Harits
-NRP : 5025211005
-Kelas : PPB E
+# ets-ppb
 
 A new Flutter project.
 
